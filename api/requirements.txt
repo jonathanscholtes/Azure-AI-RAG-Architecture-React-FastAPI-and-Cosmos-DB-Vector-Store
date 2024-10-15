@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+gunicorn
+jinja2
+python-multipart
+python-dotenv==1.0.0
+pymongo
+tiktoken
+langchain-openai
+langchain
+langchain-community
+azure-storage-blob
+numpy
+azure-identity==1.17.1
+azure-keyvault-secrets

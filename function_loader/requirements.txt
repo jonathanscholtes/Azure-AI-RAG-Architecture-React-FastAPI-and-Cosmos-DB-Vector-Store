@@ -1,0 +1,9 @@
+azure-functions
+azure-identity==1.17.1
+azure-keyvault-secrets
+azure-storage-blob
+requests
+pymongo
+langchain-openai
+langchain
+langchain-community
