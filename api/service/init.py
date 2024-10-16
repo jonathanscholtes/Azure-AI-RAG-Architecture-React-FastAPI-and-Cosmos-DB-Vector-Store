@@ -1,28 +1,24 @@
 from dotenv import load_dotenv
 from os import environ
 from langchain_openai import AzureChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.runnables.history import RunnableWithMessageHistory
 
-
+# Load environment variables from .env file
 load_dotenv(override=False)
 
+# Initialize the AzureChatOpenAI model
+llm: AzureChatOpenAI | None = None
 
-
-llm: AzureChatOpenAI | None=None
-
-def LLM_init():
-
+def initialize_llm():
+    """Initialize the Azure Chat OpenAI model with specified parameters."""
     global llm
-
     llm = AzureChatOpenAI(
-    azure_deployment="gpt-chat", ## azure_deployment: name of chat model deployed in Azure OpenAI Studio
-    api_version= '2023-03-15-preview', #"2024-05-01-preview",
-    temperature=.25,
-    max_tokens=None,
-    timeout=None,
-    max_retries=2,
+        azure_deployment="gpt-chat",  # Name of the chat model deployed in Azure OpenAI Studio
+        api_version='2023-03-15-preview',  # API version for the Azure OpenAI service
+        temperature=0.25,
+        max_tokens=None,
+        timeout=None,
+        max_retries=2,
     )
 
-
-LLM_init()
+# Call the initialization function
+initialize_llm()

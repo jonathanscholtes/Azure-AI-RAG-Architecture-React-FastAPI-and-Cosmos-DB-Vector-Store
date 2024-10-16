@@ -1,38 +1,35 @@
 from model.resource import Resource
-from .init import  vector_store
+from .init import vector_store
 from langchain.docstore.document import Document
-from typing import List, Optional, Union
+from typing import List, Tuple
 
 
+def results_to_model(result: Document) -> Resource:
+    """Convert a Document to a Resource model."""
+    return Resource(
+        resource_id=result.metadata["resource_id"],
+        page_id=result.metadata["page_id"],
+        title=result.metadata["title"],
+        source=f"{result.metadata['chapter']} (page-{result.metadata['pagenumber']})",
+        content=result.page_content,
+    )
 
 
-def results_to_model(result:Document) -> Resource:
-    return Resource(resource_id = result.metadata["resource_id"],
-                        page_id = result.metadata["page_id"],
-                        title=result.metadata["title"],
-                        source=f"{result.metadata['chapter']}  (page-{result.metadata['pagenumber']})",
-                        content=result.page_content)
+def similarity_search(query: str, logger) -> Tuple[List[Resource], List[Document]]:
+    """Perform a similarity search and return filtered results."""
+    docs = vector_store.similarity_search_with_score(query, 6)
 
+    # Filter documents based on cosine similarity score
+    docs_filtered = [doc for doc, score in docs if score >= 0.72]
 
-
-def similarity_search(query:str, logger)-> tuple[list[Resource], list[Document]]:
-
-    docs = vector_store.similarity_search_with_score(query,6)
-
-    # Cosine Similarity:
-    #It measures the cosine of the angle between two vectors in an n-dimensional space.
-    #The values of similarity metrics typically range between 0 and 1, with higher values indicating greater similarity between the vectors.
-    docs_filters = [doc for doc, score  in docs if score >=.72]
-
-    # List the scores for documents
-    for doc, score  in docs:
+    # Log and print scores for all documents
+    for doc, score in docs:
         print(score)
         logger.info(score)
 
-    # Print number of documents passing score threshold
-    print(len(docs_filters))
-    logger.info(f'Print number of documents passing score threshold: {len(docs_filters)}')
-  
-    return [results_to_model(document) for document in docs_filters],docs_filters
-  
+    # Log the number of documents that passed the score threshold
+    num_filtered = len(docs_filtered)
+    print(num_filtered)
+    logger.info(f'Number of documents passing score threshold: {num_filtered}')
 
+    return [results_to_model(document) for document in docs_filtered], docs_filtered

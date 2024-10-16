@@ -132,14 +132,11 @@ class CosmosDBLoader():
             COLLECTION_NAME = "resources"
             INDEX_NAME = "vectorSearchIndex"
 
-           
+        
             client = MongoClient(MONGO_CONNECTION_STRING)
 
-            try:
-
-                client.admin.command('ping')
-            except ConnectionFailure:
-                raise CosmosDBLoaderException("Unable to reach Mongo DB Server")
+            client.admin.command('ping')
+            
 
 
             db = client[DB_NAME]
@@ -171,6 +168,8 @@ class CosmosDBLoader():
                 similarity_algorithm = CosmosDBSimilarityType.COS
 
                 vector_store.create_index(num_lists, dimensions, similarity_algorithm)
+        except ConnectionFailure:
+                raise CosmosDBLoaderException("Unable to reach Mongo DB Server")
         except Exception as e:
                 raise CosmosDBLoaderException(e)
 

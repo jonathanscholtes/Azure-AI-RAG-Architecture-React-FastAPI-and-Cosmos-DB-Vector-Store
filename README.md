@@ -65,11 +65,11 @@ Navigate to the deployment directory:
 cd deploy
 ```
 
-Then, use the following PowerShell command to deploy the solution. Make sure to replace the placeholders with your actual subscription name, CosmosDB username, and password:
+Then, use the following PowerShell command to deploy the solution. Make sure to replace the placeholders with your actual subscription name, Azure Region (ResourceGroupLocation), CosmosDB for MongoDB vCore username, and password:
 
 **PowerShell**
 ```bash
-.\deploy.ps1 -Subscription '[Subscription Name]' -CosmosadminUsername '[Username to create for CosmosDB]' -CosmosadminPassword '[Password to Create for CosmosDB]'
+.\deploy.ps1 -Subscription '[Subscription Name]' -ResourceGroupLocation 'southcentralus' -CosmosadminUsername '[Username to create for CosmosDB]' -CosmosadminPassword '[Password to Create for CosmosDB]'
 ```
 
 This script will provision the necessary resources in your Azure subscription according to the specified parameters. The deployment may take upto **30 minutes** to provision all Azure resources.
