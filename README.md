@@ -1,10 +1,16 @@
+> [!WARNING]  
+> **This project is currently in active development and may contain breaking changes.**  
+> Updates and modifications are being made frequently, which may impact stability or functionality. This notice will be removed once development is complete and the project reaches a stable release.
+
+
 # Designing a Robust and Secure GenAI RAG Architecture with React, Python FastAPI, and Azure
 
 ## Overview
 
-This project provides a comprehensive guide on how to operationalize a Generative AI (GenAI) solution on Azure using a Retrieval-Augmented Generation (RAG) architecture. It leverages key Azure components, including CosmosDB as a vector store, Azure OpenAI for model inferencing, and integrates front-end and back-end functionality with React and Python. Designed with a focus on security, scalability, and user experience, this project follows best practices for deploying RAG workflows on Azure.
+This project provides a guide to operationalizing a Generative AI (GenAI) solution on Azure using a Retrieval-Augmented Generation (RAG) architecture. It leverages Azure components like CosmosDB for vector storage, Azure OpenAI for model inference, and integrates a full-stack setup with React and Python. Built with a focus on security, scalability, and user experience, this solution follows best practices for deploying RAG workflows on Azure.
 
-Deployment is managed through Bicep templates and the Azure CLI, enabling automated, consistent, and repeatable infrastructure setup. This solution showcases how to build a robust and enterprise-ready AI application, ideal for scenarios requiring secure data handling, efficient information retrieval, and seamless user interactions within a GenAI-driven interface.
+Automated deployment is managed via Bicep templates and Azure CLI, ensuring a consistent and repeatable infrastructure setup. Building on [LangChain RAG with React, FastAPI, and Cosmos DB Vector](https://stochasticcoder.com/2024/02/27/langchain-rag-with-react-fastapi-cosmos-db-vector-part-1/), it adds Azure OpenAI, enhanced logging, networking, and security configurations for an enterprise-ready GenAI solution that handles secure data, efficient retrieval, and seamless user interactions in real-world applications.
+
 
 
 ## Key Features
@@ -157,6 +163,9 @@ az rest --method delete --url https://management.azure.com/subscriptions/[Subscr
 
 ## License
 This project is licensed under the [MIT License](MIT.md), granting permission for commercial and non-commercial use with proper attribution.
+
+## Support
+For any questions or issues, please [open an issue](https://github.com/jonathanscholtes/Azure-AI-RAG-Architecture-React-FastAPI-and-Cosmos-DB-Vector-Store/issues) on GitHub or reach out to the project maintainers.
 
 ## Disclaimer
 This demo application is intended solely for educational and demonstration purposes. It is provided "as-is" without any warranties, and users assume all responsibility for its use.

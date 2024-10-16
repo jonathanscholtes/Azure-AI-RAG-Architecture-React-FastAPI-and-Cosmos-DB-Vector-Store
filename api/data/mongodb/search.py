@@ -17,12 +17,12 @@ def results_to_model(result:Document) -> Resource:
 
 def similarity_search(query:str, logger)-> tuple[list[Resource], list[Document]]:
 
-    docs = vector_store.similarity_search_with_score(query,4)
+    docs = vector_store.similarity_search_with_score(query,6)
 
     # Cosine Similarity:
     #It measures the cosine of the angle between two vectors in an n-dimensional space.
     #The values of similarity metrics typically range between 0 and 1, with higher values indicating greater similarity between the vectors.
-    docs_filters = [doc for doc, score  in docs if score >=.75]
+    docs_filters = [doc for doc, score  in docs if score >=.72]
 
     # List the scores for documents
     for doc, score  in docs:
