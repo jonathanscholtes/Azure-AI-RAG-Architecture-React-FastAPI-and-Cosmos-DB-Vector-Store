@@ -75,7 +75,7 @@ module cosmosDbModule 'modules/cosmosdb.bicep' = {
   dependsOn: [vnetModule]
 }
 
-module openAiServiceModule 'modules/openaiService.bicep' = {
+module openAiServiceModule 'modules/openai_service.bicep' = {
   name: 'openAiServiceModule'
   scope: newRG
   params: {
@@ -87,6 +87,18 @@ module openAiServiceModule 'modules/openaiService.bicep' = {
     customSubdomain: 'openai-app-${uniqueSuffix}'
   }
   dependsOn: [managedIdentityModule,vnetModule]
+}
+
+module openAiPEModule 'modules/openai_private_endpoint.bicep' = {
+  name: 'openAiPEModule'
+  scope: newRG
+  params: {
+    openAiServiceName: openAiServiceModule.outputs.openAiServiceName
+    location: resourceGroupLocation
+    vnetId: vnetModule.outputs.vnetId
+    subnetName: 'aiSubnet'
+  }
+  dependsOn: [openAiServiceModule,vnetModule]
 }
 
 module keyVaultModule 'modules/keyvault.bicep' = {
