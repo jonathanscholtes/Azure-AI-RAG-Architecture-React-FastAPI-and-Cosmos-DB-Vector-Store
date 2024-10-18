@@ -5,8 +5,9 @@ param identityId string
 param vnetId string
 param subnetName string
 param appInsightsName string
+param openaiEndpoint string
 
-resource apim 'Microsoft.ApiManagement/service@2021-08-01' = {
+resource apimService 'Microsoft.ApiManagement/service@2021-08-01' = {
   name: apimName
   location: location
   sku: {
@@ -29,40 +30,69 @@ resource apim 'Microsoft.ApiManagement/service@2021-08-01' = {
   }
 }
 
-
-
-resource openaiApi 'Microsoft.ApiManagement/service/apis@2021-08-01' = {
-  parent: apim
-  name: openAiServiceName
+resource backend1 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = {
+  parent: apimService
+  name: 'backend1'
   properties: {
-    displayName: 'Azure OpenAI API'
-    serviceUrl: 'https://api.openai.azure.com/v1'
-    path: 'openai'
-    protocols: [
-      'https'
-    ]
+    url: '${openaiEndpoint}/openai'
+    protocol: 'http'
+    circuitBreaker: {
+      rules: [
+        {
+          failureCondition: {
+            count: 3
+            errorReasons: [
+              'Server errors'
+            ]
+            interval: 'P1D'
+            statusCodeRanges: [
+              {
+                min: 500
+                max: 599
+              }
+            ]
+          }
+          name: 'myBreakerRule'
+          tripDuration: 'PT1H'
+        }
+      ]
+    }
   }
 }
 
-resource openaiApiOperation 'Microsoft.ApiManagement/service/apis/operations@2021-08-01' = {
-  parent: openaiApi
-  name: 'getOpenAIResponse'
+resource loadBalancing 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = {
+  parent: apimService
+  name: 'LoadBalancer'
   properties: {
-    displayName: 'Get OpenAI Response'
-    method: 'POST'
-    urlTemplate: '/openai'
-    request: {
-      description: 'Request to OpenAI API'
-      queryParameters: []
-      headers: []
-      representations: []
+    description: 'Load balancer for multiple backends'
+    type: 'Pool'
+    pool: {
+      services: [
+        {
+          id: '/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.ApiManagement/service/${apimService.name}/backends/${backend1.name}'
+        }
+      ]
     }
-    responses: []
+  }
+}
+
+resource api1 'Microsoft.ApiManagement/service/apis@2020-06-01-preview' = {
+  parent: apimService
+  name: openAiServiceName
+  properties: {
+    displayName: openAiServiceName
+    apiType: 'http'
+    path: 'openai'
+    format: 'openapi+json-link'
+    value: 'https://raw.githubusercontent.com/Azure/azure-rest-api-specs/main/specification/cognitiveservices/data-plane/AzureOpenAI/inference/preview/2024-03-01-preview/inference.json'
+    subscriptionKeyParameterNames: {
+      header: 'api-key'
+    }
   }
 }
 
 resource openaiApiPolicy 'Microsoft.ApiManagement/service/apis/policies@2021-08-01' = {
-  parent: openaiApi
+  parent: api1
   name: 'policy'
   properties: {
     format: 'rawxml'
@@ -88,9 +118,6 @@ resource openaiApiPolicy 'Microsoft.ApiManagement/service/apis/policies@2021-08-
   }
 }
 
-
-
-
 resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   name: appInsightsName
   location: location
@@ -100,10 +127,9 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' = {
   }
 }
 
-
 resource aiLoggerWithSystemAssignedIdentity 'Microsoft.ApiManagement/service/loggers@2022-08-01' = {
   name: 'aiLoggerWithSystemAssignedIdentity'
-  parent: apim
+  parent: apimService
   properties: {
     loggerType: 'applicationInsights'
     description: 'Application Insights logger with connection string'
@@ -114,6 +140,5 @@ resource aiLoggerWithSystemAssignedIdentity 'Microsoft.ApiManagement/service/log
   }
 }
 
-
-output apiManagementProxyHostName string = apim.properties.hostnameConfigurations[0].hostName
-output apiManagementDeveloperPortalHostName string = replace(apim.properties.developerPortalUrl, 'https://', '')
+output apiManagementProxyHostName string = apimService.properties.hostnameConfigurations[0].hostName
+output apiManagementDeveloperPortalHostName string = replace(apimService.properties.developerPortalUrl, 'https://', '')

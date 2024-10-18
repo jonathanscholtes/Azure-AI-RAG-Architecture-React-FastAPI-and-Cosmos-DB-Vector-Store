@@ -126,6 +126,7 @@ module apiManagementServiceModule 'modules/apim.bicep' = {
     openAiServiceName: openAiServiceModule.outputs.openAiServiceName
     subnetName: 'apimSubnet'
     vnetId: vnetModule.outputs.vnetId
+    openaiEndpoint: openAiServiceModule.outputs.OpenAIEndPoint
   }
   dependsOn:[managedIdentityModule,keyVaultModule,openAiServiceModule]
 }
