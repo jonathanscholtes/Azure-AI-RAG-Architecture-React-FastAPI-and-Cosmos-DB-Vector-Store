@@ -20,7 +20,7 @@ resource newRG 'Microsoft.Resources/resourceGroups@2024-03-01' = {
   location: resourceGroupLocation
 }
 
-module managedIdentityModule 'modules/managedIdentity.bicep' = {
+module managedIdentityModule 'modules/infra/managedIdentity.bicep' = {
   name: 'managedIdentityModule'
   scope: newRG
   params: {
@@ -29,7 +29,7 @@ module managedIdentityModule 'modules/managedIdentity.bicep' = {
   }
 }
 
-module vnetModule 'modules/vnet.bicep' = {
+module vnetModule 'modules/networking/vnet.bicep' = {
   name: 'vnetModule'
   scope: newRG
   params: {
@@ -38,7 +38,7 @@ module vnetModule 'modules/vnet.bicep' = {
   }
 }
 
-module logModule 'modules/loganalytics.bicep' = {
+module logModule 'modules/infra/loganalytics.bicep' = {
   name: 'logModule'
   scope: newRG
   params: {
@@ -47,7 +47,7 @@ module logModule 'modules/loganalytics.bicep' = {
   }
 }
 
-module storageAcct 'modules/storage.bicep' = {
+module storageAcct 'modules/data/storage.bicep' = {
   name: 'storageModule'
   scope: newRG
   params: {
@@ -60,7 +60,7 @@ module storageAcct 'modules/storage.bicep' = {
   dependsOn: [vnetModule]
 }
 
-module cosmosDbModule 'modules/cosmosdb.bicep' = {
+module cosmosDbModule 'modules/data/cosmosdb.bicep' = {
   name: 'cosmosDbModule'
   scope: newRG
   params: {
@@ -101,7 +101,7 @@ module openAiPEModule 'modules/openai_private_endpoint.bicep' = {
   dependsOn: [openAiServiceModule,vnetModule]
 }
 
-module keyVaultModule 'modules/keyvault.bicep' = {
+module keyVaultModule 'modules/infra/keyvault.bicep' = {
   scope: newRG
   name: 'keyVaultModule'
   params: {
@@ -130,6 +130,29 @@ module apiManagementServiceModule 'modules/apim.bicep' = {
   }
   dependsOn:[managedIdentityModule,keyVaultModule,openAiServiceModule]
 }
+
+module apimDnsModule 'modules/apim_dns.bicep' = {
+  scope: newRG
+  name: 'apimDnsModule'
+  params: {
+    apiManagementName:apiManagementServiceModule.outputs.apimServiceName
+    vnetId:vnetModule.outputs.vnetId
+  }
+  dependsOn:[apiManagementServiceModule]
+}
+
+/*module apiManagementServicePEModule 'modules/apim_private_endpoint.bicep' ={
+  name: 'apiManagementServicePEModule'
+  scope: newRG
+  params: {
+    apimServiceName:apiManagementServiceModule.outputs.apimServiceName
+    location:resourceGroupLocation
+    subnetName:'servicesSubnet'
+    vnetId:vnetModule.outputs.vnetId
+  }
+  dependsOn:[apiManagementServiceModule]
+}*/
+
 
 module appServiceModule 'modules/appService.bicep' = {
   name: 'appServiceModule'

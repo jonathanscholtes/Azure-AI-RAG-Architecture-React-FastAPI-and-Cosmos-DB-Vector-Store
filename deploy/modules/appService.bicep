@@ -102,6 +102,11 @@ resource appServiceAPI 'Microsoft.Web/sites@2022-03-01' = {
           name:'KV_CosmosDBConnectionString'
           value:kv_CosmosDBConnectionString
         }
+        {
+          // Temp to fix: ImportError: cannot import name 'AccessTokenInfo' from 'azure.core.credentials'
+          name:'WEBSITE_PIN_SYSTEM_IMAGES'
+          value:'application_insights_python|applicationinsights/auto-instrumentation/python:1.0.0b18'
+        }
         
       
       ]

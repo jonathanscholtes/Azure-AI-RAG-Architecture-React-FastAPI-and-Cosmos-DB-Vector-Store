@@ -1,103 +1,12 @@
+
+
 param vnetName string
 param vnetLocation string
-param addressPrefix string = '10.0.0.0/16'
 
 
-resource vnet 'Microsoft.Network/virtualNetworks@2023-04-01' = {
+resource vnet 'Microsoft.Network/virtualNetworks@2023-04-01' existing ={
   name: vnetName
-  location: vnetLocation
-  properties: {
-    addressSpace: {
-      addressPrefixes: [
-        addressPrefix
-      ]
-    }
-    subnets: [
-      {
-        name: 'webSubnet'
-        properties: {
-          addressPrefix: '10.0.1.0/24'
-          privateEndpointNetworkPolicies: 'Enabled'
-          privateLinkServiceNetworkPolicies: 'Enabled'
-          delegations: [
-            {
-              name: 'webDelegation'
-              properties: {
-                serviceName: 'Microsoft.Web/serverFarms'
-              }
-            }
-          ]
-        }
-        type: 'Microsoft.Network/virtualNetworks/subnets'
-      }
-      {
-        name: 'aiSubnet'
-        properties: {
-          addressPrefix: '10.0.2.0/24'
-          privateEndpointNetworkPolicies: 'Enabled'
-          privateLinkServiceNetworkPolicies: 'Enabled'
-          serviceEndpoints: [
-            {
-              service: 'Microsoft.CognitiveServices'              
-            }
-          ]
-        }
-        type: 'Microsoft.Network/virtualNetworks/subnets'
-      }
-      {
-        name: 'dataSubnet'
-        properties: {
-          addressPrefix: '10.0.3.0/24'
-          privateEndpointNetworkPolicies: 'Enabled'
-          privateLinkServiceNetworkPolicies: 'Enabled'        
-           serviceEndpoints: [
-            {
-              service: 'Microsoft.Storage'              
-            }
-            {
-              service: 'Microsoft.AzureCosmosDB'
-            }
-          ]
-          delegations: [
-            {
-              name: 'webDelegation'
-              properties: {
-                serviceName: 'Microsoft.Web/serverFarms'
-              }
-            }
-          ]
-        }
-        type: 'Microsoft.Network/virtualNetworks/subnets'
-      }
-      {
-        name: 'servicesSubnet'
-        properties: {
-          addressPrefix: '10.0.5.0/24'
-          privateEndpointNetworkPolicies: 'Enabled'
-          privateLinkServiceNetworkPolicies: 'Enabled'
-        }
-        type: 'Microsoft.Network/virtualNetworks/subnets'
-      }
-      {
-        name: 'loaderSubnet'
-        properties: {
-          addressPrefix: '10.0.6.0/24'
-          privateEndpointNetworkPolicies: 'Disabled'
-          delegations: [
-            {
-              name: 'webDelegation'
-              properties: {
-                serviceName: 'Microsoft.Web/serverFarms'
-              }
-            }
-          ]
-        }
-        type: 'Microsoft.Network/virtualNetworks/subnets'
-      }     
-    ]
-  }
 }
-
 
 resource apimNsg 'Microsoft.Network/networkSecurityGroups@2020-05-01' = {
   name: '${vnetName}-apimSubnet-nsg-${vnetLocation}'
@@ -322,7 +231,6 @@ resource apimNsg 'Microsoft.Network/networkSecurityGroups@2020-05-01' = {
 }
 
 
-
 resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2020-05-01' = {
   parent: vnet
   name: 'apimSubnet'
@@ -336,8 +244,3 @@ resource apimSubnet 'Microsoft.Network/virtualNetworks/subnets@2020-05-01' = {
   }
   type: 'Microsoft.Network/virtualNetworks/subnets'
 }
-
-
-
-output vnetId string = vnet.id
-

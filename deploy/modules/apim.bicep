@@ -30,6 +30,8 @@ resource apimService 'Microsoft.ApiManagement/service@2021-08-01' = {
   }
 }
 
+
+
 resource backend1 'Microsoft.ApiManagement/service/backends@2023-09-01-preview' = {
   parent: apimService
   name: 'backend1'
@@ -91,30 +93,16 @@ resource api1 'Microsoft.ApiManagement/service/apis@2020-06-01-preview' = {
   }
 }
 
+
+var headerPolicyXml = format(loadTextContent('./policy.xml'), loadBalancing.name, 5000)
+
+
 resource openaiApiPolicy 'Microsoft.ApiManagement/service/apis/policies@2021-08-01' = {
   parent: api1
   name: 'policy'
   properties: {
     format: 'rawxml'
-    value: '''
-    <policies>
-      <inbound>
-        <base />
-        <set-header name="Authorization" exists-action="override">
-          <value>@("Bearer " + context.Request.Headers.GetValueOrDefault("Authorization", ""))</value>
-        </set-header>
-      </inbound>
-      <backend>
-        <base />
-      </backend>
-      <outbound>
-        <base />
-      </outbound>
-      <on-error>
-        <base />
-      </on-error>
-    </policies>
-    '''
+    value: headerPolicyXml
   }
 }
 
@@ -142,3 +130,4 @@ resource aiLoggerWithSystemAssignedIdentity 'Microsoft.ApiManagement/service/log
 
 output apiManagementProxyHostName string = apimService.properties.hostnameConfigurations[0].hostName
 output apiManagementDeveloperPortalHostName string = replace(apimService.properties.developerPortalUrl, 'https://', '')
+output apimServiceName string = apimName
