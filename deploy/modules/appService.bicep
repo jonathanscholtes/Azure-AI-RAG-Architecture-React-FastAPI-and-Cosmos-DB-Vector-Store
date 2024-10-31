@@ -8,7 +8,7 @@ param identityName string
 param keyVaultUri string
 param kv_CosmosDBConnectionString string
 param OpenAIEndPoint string
-param StorageConnectionString string
+param StorageBlobURL string
 param logAnalyticsWorkspaceName string
 param appInsightsName string
 
@@ -75,8 +75,8 @@ resource appServiceAPI 'Microsoft.Web/sites@2022-03-01' = {
           value: 'images'
         }
         {
-          name: 'AZURE_STORAGE_CONNECTION_STRING'
-          value: StorageConnectionString
+          name: 'AZURE_STORAGE_URL'
+          value: StorageBlobURL
         } 
         {
           name: 'AZURE_CLIENT_ID'

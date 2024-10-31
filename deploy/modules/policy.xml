@@ -1,10 +1,10 @@
  <policies>
       <inbound>
         <base />
-        <set-backend-service id="apim-generated-policy" backend-id="{0}" />
         <set-header name="Authorization" exists-action="override">
           <value>@("Bearer " + context.Request.Headers.GetValueOrDefault("Authorization", ""))</value>
         </set-header>
+        <set-backend-service id="apim-generated-policy" backend-id="{0}" />
       </inbound>
       <backend>
         <base />

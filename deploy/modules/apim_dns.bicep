@@ -2,7 +2,7 @@
 param apiManagementName string
 param vnetId string
 
-var privateDnsZoneName = 'azure-api.net'
+var privateDnsZoneName = 'private.azure-api.net'
 var customDomainName = 'vector-search'
 
 

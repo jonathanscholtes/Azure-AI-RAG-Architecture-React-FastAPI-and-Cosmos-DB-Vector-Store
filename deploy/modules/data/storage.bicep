@@ -1,6 +1,7 @@
 param storageName string
 param location string
 param vnetId string
+param identityName string
 param subnetName string
 param subnetName_pe string
 
@@ -8,6 +9,11 @@ param subnetName_pe string
 var privateDnsZoneName = 'privatelink.blob.core.windows.net'
 var privateEndpointName = '${storageName}-pe'
 var pvtEndpointDnsGroupName = '${privateEndpointName}/default'
+
+
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing= {
+  name: identityName
+}
 
 resource storageAcct 'Microsoft.Storage/storageAccounts@2023-04-01' = {
   name: storageName
@@ -59,6 +65,17 @@ resource archiveContainer 'Microsoft.Storage/storageAccounts/blobServices/contai
   }
 }
 
+
+resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  name: guid(managedIdentity.id, storageAcct.id, 'cognitive-services-openai-contributor')
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe') // Storage Blob Data Contributor
+    principalId: managedIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+  }
+  scope:storageAcct
+  dependsOn:[storageAcct]
+}
 
 
 resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = {
@@ -133,3 +150,4 @@ resource pvtEndpointDnsGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneG
 
 
 output storageConnectionString string = 'DefaultEndpointsProtocol=https;AccountName=${storageAcct.name};AccountKey=${listKeys(storageAcct.id, storageAcct.apiVersion).keys[0].value};EndpointSuffix=core.windows.net'
+output storageBlobURL string = 'https://${storageAcct.name}.blob.core.windows.net/'

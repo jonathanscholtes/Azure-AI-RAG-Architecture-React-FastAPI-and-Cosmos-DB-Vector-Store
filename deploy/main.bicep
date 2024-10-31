@@ -54,6 +54,7 @@ module storageAcct 'modules/data/storage.bicep' = {
     location: resourceGroupLocation
     storageName: 'savecsearch${uniqueSuffix}'
     vnetId: vnetModule.outputs.vnetId
+    identityName: managedIdentityModule.outputs.identityName
     subnetName: 'dataSubnet'
     subnetName_pe:'servicesSubnet'
   }
@@ -115,7 +116,7 @@ module keyVaultModule 'modules/infra/keyvault.bicep' = {
   dependsOn: [managedIdentityModule,vnetModule,cosmosDbModule]
 }
 
-module apiManagementServiceModule 'modules/apim.bicep' = {
+/*module apiManagementServiceModule 'modules/apim.bicep' = {
   scope: newRG
   name: 'apiManagementServiceModule'
   params: {
@@ -141,7 +142,7 @@ module apimDnsModule 'modules/apim_dns.bicep' = {
   dependsOn:[apiManagementServiceModule]
 }
 
-/*module apiManagementServicePEModule 'modules/apim_private_endpoint.bicep' ={
+module apiManagementServicePEModule 'modules/apim_private_endpoint.bicep' ={
   name: 'apiManagementServicePEModule'
   scope: newRG
   params: {
@@ -166,13 +167,13 @@ module appServiceModule 'modules/appService.bicep' = {
     subnetName: 'webSubnet'
     identityName: managedIdentityModule.outputs.identityName
     OpenAIEndPoint: openAiServiceModule.outputs.OpenAIEndPoint
-    StorageConnectionString: storageAcct.outputs.storageConnectionString
+    StorageBlobURL: storageAcct.outputs.storageBlobURL
     logAnalyticsWorkspaceName: logModule.outputs.workspaceName
     appInsightsName: 'appi-vector-search-${uniqueSuffix}'
     kv_CosmosDBConnectionString: keyVaultModule.outputs.kv_CosmosDBConnectionString
     keyVaultUri:keyVaultModule.outputs.keyVaultUri
   }
-  dependsOn: [cosmosDbModule,keyVaultModule ,apiManagementServiceModule,logModule ]
+  dependsOn: [cosmosDbModule,keyVaultModule ,openAiServiceModule,logModule ]
 }
 
 module functionappModule 'modules/functionapp.bicep' = {
@@ -192,7 +193,7 @@ module functionappModule 'modules/functionapp.bicep' = {
     kv_CosmosDBConnectionString: keyVaultModule.outputs.kv_CosmosDBConnectionString
     keyVaultUri:keyVaultModule.outputs.keyVaultUri
   }
-  dependsOn:[storageAcct,cosmosDbModule , keyVaultModule, apiManagementServiceModule,logModule]
+  dependsOn:[storageAcct,cosmosDbModule , keyVaultModule, openAiServiceModule,logModule]
 }
 
 

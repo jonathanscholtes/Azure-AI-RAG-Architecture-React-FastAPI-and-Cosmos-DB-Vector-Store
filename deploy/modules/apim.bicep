@@ -23,10 +23,10 @@ resource apimService 'Microsoft.ApiManagement/service@2021-08-01' = {
   properties: {
     publisherEmail: 'your-email@example.com'
     publisherName: 'Your Name'
-    virtualNetworkConfiguration: {
+   /*virtualNetworkConfiguration: {
       subnetResourceId: '${vnetId}/subnets/${subnetName}'
-    }
-    virtualNetworkType: 'Internal'
+    }*/
+    //virtualNetworkType: 'Internal'
   }
 }
 
