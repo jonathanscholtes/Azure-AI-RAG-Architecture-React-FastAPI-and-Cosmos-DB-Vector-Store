@@ -77,6 +77,28 @@ resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-prev
   dependsOn:[storageAcct]
 }
 
+resource roleAssignmentQueue 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  name: guid(managedIdentity.id, storageAcct.id, 'cognitive-services-openai-contributor')
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '974c5e8b-45b9-4653-ba55-5f855dd0fb88') // Storage Queue Data Contributor
+    principalId: managedIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+  }
+  scope:storageAcct
+  dependsOn:[storageAcct]
+}
+
+resource roleAssignmentTable 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  name: guid(managedIdentity.id, storageAcct.id, 'cognitive-services-openai-contributor')
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3') // Storage Table Data Contributor
+    principalId: managedIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+  }
+  scope:storageAcct
+  dependsOn:[storageAcct]
+}
+
 
 resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = {
   name: privateEndpointName
@@ -149,5 +171,5 @@ resource pvtEndpointDnsGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneG
 
 
 
-output storageConnectionString string = 'DefaultEndpointsProtocol=https;AccountName=${storageAcct.name};AccountKey=${listKeys(storageAcct.id, storageAcct.apiVersion).keys[0].value};EndpointSuffix=core.windows.net'
+output StorageAccountName string = storageAcct.name
 output storageBlobURL string = 'https://${storageAcct.name}.blob.core.windows.net/'

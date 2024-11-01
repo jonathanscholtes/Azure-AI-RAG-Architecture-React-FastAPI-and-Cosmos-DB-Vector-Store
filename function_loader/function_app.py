@@ -20,7 +20,7 @@ from azure.keyvault.secrets import SecretClient
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 
-@app.blob_trigger(arg_name="myblob", path="load", connection="AzureWebJobsStorage")
+@app.blob_trigger(arg_name="myblob", path="load", connection="AzureWebJobsStorage__accountName")
 def Loader(myblob: func.InputStream):
     logging.info(f"Python blob trigger function processed blob\n"
                  f"Name: {myblob.name}\n"
@@ -177,14 +177,20 @@ class CosmosDBLoader():
 class BlobLoader():
 
     def __init__(self):
-        connection_string = environ.get("AZURE_STORAGE_CONNECTION_STRING")
+        #connection_string = environ.get("AZURE_STORAGE_CONNECTION_STRING")
 
-        # Create the BlobServiceClient object        
-        self.blob_service_client =  BlobServiceClient.from_connection_string(connection_string)
+        credential = DefaultAzureCredential()
+
+        AZURE_STORAGE_URL = environ.get("AZURE_STORAGE_URL")
+
+        # Create the BlobServiceClient object    
+        self.blob_service_client =  BlobServiceClient(AZURE_STORAGE_URL, credential=credential)    
+        #self.blob_service_client =  BlobServiceClient.from_connection_string(connection_string)
 
 
     def load_binay_data(self,data, blob_name:str, container_name:str):     
 
+        
         blob_client = self.blob_service_client.get_blob_client(container=container_name, blob=blob_name)
 
         # Upload the blob data - default blob type is BlockBlob

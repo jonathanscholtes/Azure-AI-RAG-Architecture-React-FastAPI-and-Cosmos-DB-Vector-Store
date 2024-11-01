@@ -1,7 +1,8 @@
 param functionAppName string
 param functionAppPlanName string
 param location string
-param StorageConnectionString string
+param StorageBlobURL string
+param StorageAccountName string
 param vnetId string
 param subnetName string
 param identityName string
@@ -40,9 +41,21 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
     siteConfig: {
       appSettings: [
         {
-          name: 'AzureWebJobsStorage'
-          value: StorageConnectionString
+          name: 'AzureWebJobsStorage__credential'
+          value: 'managedidentity'
         }
+        {
+          name: 'AzureWebJobsStorage__clientId'
+          value: managedIdentity.properties.clientId
+        }
+        {
+          name: 'AzureWebJobsStorage__accountName'
+          value: StorageAccountName
+        }
+        {
+          name: 'AZURE_STORAGE_URL'
+          value: StorageBlobURL
+        }        
         {
           name: 'FUNCTIONS_EXTENSION_VERSION'
           value: '~4'
@@ -79,10 +92,6 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
           name: 'AZURE_CLIENT_ID'
           value: managedIdentity.properties.clientId
         } 
-        {
-          name: 'AZURE_STORAGE_CONNECTION_STRING'
-          value: StorageConnectionString
-        }
         {
           name:'KeyVaultUri'
           value:keyVaultUri
