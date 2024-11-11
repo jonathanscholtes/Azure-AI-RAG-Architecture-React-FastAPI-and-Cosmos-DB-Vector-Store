@@ -13,6 +13,9 @@ param keyVaultUri string
 param kv_CosmosDBConnectionString string
 
 
+var blob_uri = 'https://${StorageAccountName}.blob.core.windows.net'
+var queue_uri = 'https://${StorageAccountName}.queue.core.windows.net'
+
 resource appServicePlan 'Microsoft.Web/serverfarms@2022-03-01' existing = {
   name: functionAppPlanName
 }
@@ -99,6 +102,26 @@ resource functionApp 'Microsoft.Web/sites@2022-03-01' = {
         {
           name:'KV_CosmosDBConnectionString'
           value:kv_CosmosDBConnectionString
+        }
+        {
+          name:'BlobTriggerConnection__blobServiceUri'
+          value:blob_uri
+        }
+        {
+          name:'BlobTriggerConnection__queueServiceUri'
+          value:queue_uri
+        }
+        {
+          name:'BlobTriggerConnection__serviceUri'
+          value:blob_uri
+        }
+        {
+          name:'BlobTriggerConnection__credential'
+          value:'managedidentity'
+        }
+        {
+          name:'BlobTriggerConnection__clientId'
+          value: managedIdentity.properties.clientId
         }
       ]
        linuxFxVersion: 'PYTHON|3.11'
