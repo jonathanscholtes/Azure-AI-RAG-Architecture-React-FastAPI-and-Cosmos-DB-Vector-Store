@@ -125,20 +125,20 @@ module appInsightsModule 'modules/infra/appInsights.bicep' = {
   }
 }
 
-/*module apiManagementServiceModule 'modules/apim.bicep' = {
+module apiManagementServiceModule 'modules/apim.bicep' = {
   scope: newRG
   name: 'apiManagementServiceModule'
   params: {
     location: resourceGroupLocation
     apimName: 'apim-vector-search-${uniqueSuffix}'
-    appInsightsName: 'appi-vector-search-${uniqueSuffix}'
+    appInsightsName: appInsightsModule.outputs.appInsightsName
     identityId: managedIdentityModule.outputs.identityId
     openAiServiceName: openAiServiceModule.outputs.openAiServiceName
     subnetName: 'apimSubnet'
     vnetId: vnetModule.outputs.vnetId
     openaiEndpoint: openAiServiceModule.outputs.OpenAIEndPoint
   }
-  dependsOn:[managedIdentityModule,keyVaultModule,openAiServiceModule]
+  dependsOn:[managedIdentityModule,appInsightsModule,keyVaultModule,openAiServiceModule]
 }
 
 module apimDnsModule 'modules/apim_dns.bicep' = {
@@ -151,7 +151,7 @@ module apimDnsModule 'modules/apim_dns.bicep' = {
   dependsOn:[apiManagementServiceModule]
 }
 
-module apiManagementServicePEModule 'modules/apim_private_endpoint.bicep' ={
+/*module apiManagementServicePEModule 'modules/apim_private_endpoint.bicep' ={
   name: 'apiManagementServicePEModule'
   scope: newRG
   params: {
