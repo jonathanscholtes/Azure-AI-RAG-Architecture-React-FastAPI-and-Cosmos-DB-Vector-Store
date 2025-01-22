@@ -1,13 +1,14 @@
 # Params
 param (
     [string]$Subscription,
-    [string]$ResourceGroupLocation = "southcentralus",
+    [string]$Location = "southcentralus",
     [string]$CosmosadminUsername,
     [string]$CosmosadminPassword   
 )
 
 # Variables
-$resourceGroupName = "rg-vectorsearch-demo"
+$projectName = "vectorsearch"
+$environmentName = "demo"
 $templateFile = "main.bicep"
 $deploymentName = "vectorsearchdemodeployment"
 
@@ -23,12 +24,12 @@ az account set --subscription $Subscription
 # Start the deployment
 $deploymentOutput = az deployment sub create `
     --name $deploymentName `
-    --location $ResourceGroupLocation `
+    --location $Location `
     --template-file $templateFile `
     --parameters `
-        subscription=$Subscription `
-        resourceGroupName=$resourceGroupName `
-        resourceGroupLocation=$ResourceGroupLocation `
+        environmentName=$environmentName `
+        projectName=$projectName `
+        location=$Location `
         cosmosadminUsername=$CosmosadminUsername `
         cosmosadminPassword=$CosmosadminPassword `
     --query "properties.outputs"

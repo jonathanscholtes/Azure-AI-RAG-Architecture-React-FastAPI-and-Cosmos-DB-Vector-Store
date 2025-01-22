@@ -28,7 +28,7 @@ Automated deployment is managed via Bicep templates and Azure CLI, ensuring a co
 - **Infrastructure as Code**: Uses Bicep and Azure CLI to deploy, manage, and scale resources consistently and securely across environments.
 
 ## Architecture
-![diagram](./images/design1.png)
+![diagram](./media/design1.png)
 
 The architecture of this project includes:
 
@@ -62,14 +62,14 @@ cd Azure-AI-RAG-Architecture-React-FastAPI-and-Cosmos-DB-Vector-Store
 Navigate to the deployment directory:
 
 ```bash
-cd deploy
+cd infra
 ```
 
 Then, use the following PowerShell command to deploy the solution. Make sure to replace the placeholders with your actual subscription name, Azure Region (ResourceGroupLocation), CosmosDB for MongoDB vCore username, and password:
 
 **PowerShell**
 ```bash
-.\deploy.ps1 -Subscription '[Subscription Name]' -ResourceGroupLocation 'southcentralus' -CosmosadminUsername '[Username to create for CosmosDB]' -CosmosadminPassword '[Password to Create for CosmosDB]'
+.\deploy.ps1 -Subscription '[Subscription Name]' -Location 'southcentralus' -CosmosadminUsername '[Username to create for CosmosDB]' -CosmosadminPassword '[Password to Create for CosmosDB]'
 ```
 
 This script will provision the necessary resources in your Azure subscription according to the specified parameters. The deployment may take upto **30 minutes** to provision all Azure resources.
@@ -82,13 +82,13 @@ After deployment, it's essential to allow access to the Storage Account facilita
 - Under the **Networking** section, locate the **Firewall and virtual networks** settings.
 - Add your current client IP address to the list of allowed addresses.
 
-![storage network](./images/storage_network.png)
+![storage network](./media/storage_network.png)
 
 ### 4. Upload Documents for Embedding Creation:
 
 Upload the JSON files from the [documents](documents) directory to the **load** container of the Azure Storage Account.
 
-![storage network](./images/storage_load_container.png)
+![storage network](./media/storage_load_container.png)
 
 ### 5. Validate Embedding Load in Azure CosmosDB for MongoDB vCore
 To verify the successful loading of the documents, use [MongoDB Compass](https://www.mongodb.com/products/tools/compass) or a similar tool.
@@ -110,7 +110,7 @@ Retreive connection string for Azure CosmosDB:
 - Copy connection string for new connection with MongoDB Compass
 
 Once connected you will see that 120 documents loaded into Azure CosmosDB for MongoDB vCore:
-![compass](./images/mongodb_compass.png)
+![compass](./media/mongodb_compass.png)
 
 
 ### 6. Validate GenAI Application
@@ -124,11 +124,11 @@ Upon submission, you should see the following results displayed:
 
  This initial query confirms that the application is successfully retrieving, processing, and displaying data as designed, allowing you to explore additional questions or further customize the solution.
 
-![results1](./images/react_web_results1.png)
+![results1](./media/react_web_results1.png)
 
 Selecting the returned document pages will display the page images from the Azure Storage Account:
 
-![results1](./images/react_web_results2.png)
+![results1](./media/react_web_results2.png)
 
 
 

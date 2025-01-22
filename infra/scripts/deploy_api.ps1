@@ -4,7 +4,7 @@ param (
     [string]$resourceGroupName
 )
 
-$pythonAppPath = "..\..\api"
+$pythonAppPath = "..\..\src\api"
 $tempDir = "artifacts\api\temp"
 $zipFilePath = "artifacts\api\app.zip"
 

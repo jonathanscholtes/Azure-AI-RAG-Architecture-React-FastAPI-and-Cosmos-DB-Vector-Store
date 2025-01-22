@@ -4,7 +4,7 @@ param (
     [string]$apiURL
 )
 
-$nodeAppPath = "..\..\web"
+$nodeAppPath = "..\..\src\web"
 $nodeTempDir = "artifacts\web\temp"
 $nodeBuildDir = "${nodeAppPath}\build"
 $zipFilePath = "artifacts\web\app.zip"

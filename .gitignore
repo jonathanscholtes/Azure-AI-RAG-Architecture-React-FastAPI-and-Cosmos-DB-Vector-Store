@@ -1,8 +1,8 @@
 .env
 venv/
 __pycache__/
-deploy/scripts/artifacts/api/
-deploy/scripts/artifacts/loader/
-deploy/scripts/artifacts/web/
+infra/scripts/artifacts/api/
+infra/scripts/artifacts/loader/
+infra/scripts/artifacts/web/
 .venv/
 .vscode/

@@ -4,7 +4,7 @@ param (
     [string]$resourceGroupName
 )
 
-$pythonAppPath = "..\..\function_loader"
+$pythonAppPath = "..\..\src\function_loader"
 $tempDir = "artifacts\loader\temp"
 $zipFilePath = "artifacts\loader\app.zip"
 
