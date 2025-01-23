@@ -1,7 +1,7 @@
 param location string 
 param apimName string
 param openAiServiceName string
-param identityId string
+param identityName string
 param vnetId string
 param subnetName string
 param appInsightsName string
@@ -22,6 +22,10 @@ var subscriptionId = az.subscription().subscriptionId
 
 var apiSuffix = '${openAiServiceName}/openai'
 
+resource managedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing= {
+  name: identityName
+}
+
 resource apimService 'Microsoft.ApiManagement/service@2021-08-01' = {
   name: apimName
   location: location
@@ -32,7 +36,7 @@ resource apimService 'Microsoft.ApiManagement/service@2021-08-01' = {
   identity: {
     type: 'SystemAssigned, UserAssigned'
     userAssignedIdentities: {
-      '${identityId}': {}
+      '${managedIdentity.id}': {}
     }
   }
   properties: {

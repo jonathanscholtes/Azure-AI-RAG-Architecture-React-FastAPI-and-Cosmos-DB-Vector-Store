@@ -133,44 +133,6 @@ module appInsightsModule 'core/monitor/appInsights.bicep' = {
   }
 }
 
-/*module apiManagementServiceModule 'modules/apim.bicep' = {
-  scope: newRG
-  name: 'apiManagementServiceModule'
-  params: {
-    location: resourceGroupLocation
-    apimName: 'apim-vector-search-${uniqueSuffix}'
-    appInsightsName: appInsightsModule.outputs.appInsightsName
-    identityId: managedIdentityModule.outputs.identityId
-    openAiServiceName: openAiServiceModule.outputs.openAiServiceName
-    subnetName: 'apimSubnet'
-    vnetId: vnetModule.outputs.vnetId
-    openaiEndpoint: openAiServiceModule.outputs.OpenAIEndPoint
-  }
-  dependsOn:[managedIdentityModule,appInsightsModule,keyVaultModule,openAiServiceModule]
-}
-
-module apimDnsModule 'modules/apim_dns.bicep' = {
-  scope: newRG
-  name: 'apimDnsModule'
-  params: {
-    apiManagementName:apiManagementServiceModule.outputs.apimServiceName
-    vnetId:vnetModule.outputs.vnetId
-  }
-  dependsOn:[apiManagementServiceModule]
-}
-
-module apiManagementServicePEModule 'modules/apim_private_endpoint.bicep' ={
-  name: 'apiManagementServicePEModule'
-  scope: newRG
-  params: {
-    apimServiceName:apiManagementServiceModule.outputs.apimServiceName
-    location:resourceGroupLocation
-    subnetName:'servicesSubnet'
-    vnetId:vnetModule.outputs.vnetId
-  }
-  dependsOn:[apiManagementServiceModule]
-}*/
-
 
 module appServiceModule 'core/host/appService.bicep' = {
   name: 'appServiceModule'

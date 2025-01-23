@@ -138,7 +138,7 @@ After completing testing, ensure to delete any unused Azure resources or remove 
 
 ### Resource Purge for Redeployment
 
-If you plan to delete and redeploy this solution, you may need to manually purge specific Azure resources, including **Azure API Management (APIM)** and **Azure OpenAI** services, as they may retain certain configurations even after deletion.
+If you plan to delete and redeploy this solution, you may need to manually purge **Azure OpenAI** service.
 
 #### Azure OpenAI Purge
 
@@ -152,14 +152,6 @@ To permanently delete an Azure OpenAI or other Azure AI service, follow [these s
 
 3. **Purge the Resource**:  
    Click **Purge** to permanently delete the selected resource(s). Be aware that purging is irreversible and removes all associated configurations and data for the resource.
-
-#### APIM Purge
-
-To manually delete an Azure API Management (APIM) service, use the following command, substituting your **Subscription ID**, **Region**, and **APIM Resource Name**:
-
-```bash
-az rest --method delete --url https://management.azure.com/subscriptions/[Subscription ID]/providers/Microsoft.ApiManagement/locations/[Region]/deletedservices/[APIM Resource Name]?api-version=2021-08-01
-```
 
 ## License
 This project is licensed under the [MIT License](MIT.md), granting permission for commercial and non-commercial use with proper attribution.
