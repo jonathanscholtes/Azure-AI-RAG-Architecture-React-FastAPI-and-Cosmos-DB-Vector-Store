@@ -7,7 +7,7 @@
 
 ## Overview
 
-This project provides a guide to operationalizing a Generative AI (GenAI) solution on Azure using a Retrieval-Augmented Generation (RAG) architecture. It leverages Azure components like CosmosDB for vector storage, Azure OpenAI for model inference, and integrates a full-stack setup with React and Python. Built with a focus on security, scalability, and user experience, this solution follows best practices for deploying RAG workflows on Azure.
+This project provides a guide to operationalizing a Generative AI (GenAI) solution on Azure using a Retrieval-Augmented Generation (RAG) architecture. It leverages key Azure components, including Azure CosmosDB for MongoDB VCore for vector storage and Azure OpenAI for model inference, while integrating a full-stack setup with React and Python. Designed with an emphasis on security, scalability, and user experience, the solution adheres to best practices for deploying RAG workflows on Azure. It incorporates managed identities, private endpoints, and firewall restrictions to ensure robust data and endpoint protection.
 
 Automated deployment is managed via Bicep templates and Azure CLI, ensuring a consistent and repeatable infrastructure setup. Building on [LangChain RAG with React, FastAPI, and Cosmos DB Vector](https://stochasticcoder.com/2024/02/27/langchain-rag-with-react-fastapi-cosmos-db-vector-part-1/), it adds Azure OpenAI, enhanced logging, networking, and security configurations for an enterprise-ready GenAI solution that handles secure data, efficient retrieval, and seamless user interactions in real-world applications.
 
@@ -86,7 +86,7 @@ After deployment, it's essential to allow access to the Storage Account facilita
 
 ### 4. Upload Documents for Embedding Creation:
 
-Upload the JSON files from the [documents](documents) directory to the **load** container of the Azure Storage Account.
+Upload the JSON files from the [documents](documents) directory to the **load** container of the Azure Storage Account. The Json files contain the text and images of the reference material used in this knowledge RAG example.
 
 ![storage network](./media/storage_load_container.png)
 
