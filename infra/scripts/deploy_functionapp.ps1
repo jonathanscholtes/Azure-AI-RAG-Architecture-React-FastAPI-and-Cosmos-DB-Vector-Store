@@ -14,4 +14,4 @@ $args = "$pythonAppPath $zipFilePath $tempDir --exclude_dirs venv  --exclude_fil
 # Execute the Python script
 Start-Process "python" -ArgumentList "directory_zipper.py $args" -NoNewWindow -Wait
 
-az functionapp deployment source config-zip --resource-group $resourceGroupName --name $functionAppName --src $zipFilePath --build-remote true
+az functionapp deployment source config-zip --resource-group $resourceGroupName --name $functionAppName --src $zipFilePath --build-remote true --timeout 240

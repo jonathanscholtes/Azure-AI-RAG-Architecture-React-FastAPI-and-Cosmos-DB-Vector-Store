@@ -34,7 +34,7 @@ $deploymentOutput = az deployment sub create `
         cosmosadminPassword=$CosmosadminPassword `
     --query "properties.outputs"
 
-Start-Sleep -Seconds 80
+Start-Sleep -Seconds 120
 
 # Parse the deployment output to get app names and resource group
 $deploymentOutputJson = $deploymentOutput | ConvertFrom-Json

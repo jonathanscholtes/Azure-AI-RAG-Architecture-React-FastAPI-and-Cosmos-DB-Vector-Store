@@ -142,9 +142,25 @@ Once connected you will see that 120 documents loaded into Azure CosmosDB for Mo
 ![compass](./media/mongodb_compass.png)
 
 
-### 6. Validate GenAI Application
+### 6. GenAI Application
 
-Access the Azure Web App hosting the React user interface (default name: web-vector-search-) by navigating to its assigned domain. Once the application loads, test its functionality by submitting the default question, "What is supersonic combustion?"
+#### Validate API Status
+
+After deployment, it may take a few minutes for all services to initialize. Before launching the web application, it is recommended to verify that the API is operational. 
+
+To do this, navigate to the deployed API endpoint at:  
+`https://api-vectorsearch-demo-[random].azurewebsites.net`
+
+If the API is functioning correctly, the page should display the status message: **'running'**.  
+This step ensures that the backend services are properly configured and ready for use.
+
+![results1](./media/running_api.png)
+
+#### React Web Application
+Access the Azure Web App hosting the React user interface by navigating to its assigned domain:
+`https://web-vectorsearch-demo-[random].azurewebsites.net`
+
+ Once the application loads, test its functionality by submitting the default question, "What is supersonic combustion?"
 
 Upon submission, you should see the following results displayed:
 
