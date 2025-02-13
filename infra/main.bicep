@@ -151,6 +151,7 @@ module appServiceModule 'core/host/appService.bicep' = {
     appInsightsName: appInsightsModule.outputs.appInsightsName
     kv_CosmosDBConnectionString: keyVaultModule.outputs.kv_CosmosDBConnectionString
     keyVaultUri:keyVaultModule.outputs.keyVaultUri
+    keyVaultName: keyVaultModule.outputs.keyVaultName
   }
   dependsOn: [cosmosDbModule,keyVaultModule,appInsightsModule ,openAiServiceModule,logModule ]
 }

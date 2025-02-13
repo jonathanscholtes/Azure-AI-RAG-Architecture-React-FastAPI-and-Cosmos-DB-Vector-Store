@@ -11,6 +11,7 @@ param OpenAIEndPoint string
 param StorageBlobURL string
 param logAnalyticsWorkspaceName string
 param appInsightsName string
+param keyVaultName string
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2022-03-01' = {
   name: appServicePlanName
@@ -49,6 +50,7 @@ resource appServiceAPI 'Microsoft.Web/sites@2022-03-01' = {
   properties: {
     serverFarmId: appServicePlan.id
     virtualNetworkSubnetId: '${vnetId}/subnets/${subnetName}'
+    keyVaultReferenceIdentity: managedIdentity.id
     siteConfig: {
       
       linuxFxVersion: 'PYTHON|3.11'
@@ -99,8 +101,8 @@ resource appServiceAPI 'Microsoft.Web/sites@2022-03-01' = {
           value:keyVaultUri
         }
         {
-          name:'KV_CosmosDBConnectionString'
-          value:kv_CosmosDBConnectionString
+          name:'MONGO_CONNECTION_STRING'
+          value:'@Microsoft.KeyVault(VaultName=\'${keyVaultName}\';SecretName=\'${kv_CosmosDBConnectionString}\')'
         }
         {
           // Temp to fix: ImportError: cannot import name 'AccessTokenInfo' from 'azure.core.credentials'

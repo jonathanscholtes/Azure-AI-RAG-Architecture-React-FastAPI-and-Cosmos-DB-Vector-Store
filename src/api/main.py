@@ -1,19 +1,15 @@
 import os
 from azure.identity import DefaultAzureCredential
-from azure.keyvault.secrets import SecretClient
 
 
 # Azure Key Vault and Credential Setup
 credential = DefaultAzureCredential()
-client = SecretClient(vault_url=os.environ['KeyVaultUri'], credential=credential)
 
 # Configure Azure OpenAI API Environment Variables
 os.environ["OPENAI_API_TYPE"] = "azure_ad"
 os.environ["OPENAI_API_KEY"] = credential.get_token("https://cognitiveservices.azure.com/.default").token
 os.environ["AZURE_OPENAI_AD_TOKEN"] = os.environ["OPENAI_API_KEY"]
 
-# Fetch CosmosDB Connection String from Azure Key Vault
-os.environ["MONGO_CONNECTION_STRING"] = client.get_secret(os.environ['KV_CosmosDBConnectionString']).value
 
 # Import application modules
 from web import search, content

@@ -120,6 +120,18 @@ resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-prev
   dependsOn:[keyVault]
 }
 
+resource roleUserAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  name: guid(managedIdentity.id, keyVault.id, 'key-vault-secrets-user')
+  properties: {
+    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '4633458b-17de-408a-b874-0445c86b69e6') // Key Vault Secrets User role ID
+    principalId: managedIdentity.properties.principalId
+    principalType: 'ServicePrincipal'
+  }
+  scope:keyVault
+  dependsOn:[keyVault]
+}
+
 output keyVaultId string = keyVault.id
 output keyVaultUri string = keyVault.properties.vaultUri
 output kv_CosmosDBConnectionString string = kv_CosmosDBConnectionString
+output keyVaultName string = keyVaultName
