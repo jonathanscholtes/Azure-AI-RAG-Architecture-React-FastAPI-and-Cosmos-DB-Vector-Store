@@ -102,7 +102,7 @@ resource appServiceAPI 'Microsoft.Web/sites@2022-03-01' = {
         }
         {
           name:'MONGO_CONNECTION_STRING'
-          value:'@Microsoft.KeyVault(VaultName=\'${keyVaultName}\';SecretName=\'${kv_CosmosDBConnectionString}\')'
+          value:'@Microsoft.KeyVault(VaultName=${keyVaultName};SecretName=${kv_CosmosDBConnectionString})'
         }
         {
           // Temp to fix: ImportError: cannot import name 'AccessTokenInfo' from 'azure.core.credentials'
